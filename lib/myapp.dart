@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:simple_countdown/countdown_list_view.dart';
-import 'package:simple_countdown/main_menu.dart';
-import 'package:simple_countdown/myhomepage.dart';
-import 'countdown_setter.dart';
-import 'countdown_view.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
