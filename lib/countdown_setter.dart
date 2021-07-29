@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'CountdownStore.dart';
 import 'count_down.dart';
+import 'rounded_button.dart';
 
 class CountDownSetter extends StatefulWidget {
   @override
@@ -24,6 +25,9 @@ class _CountdownSetterState extends State<CountDownSetter> {
 
   @override
   Widget build(BuildContext context) {
+    const dataStyle = TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
+
+    const double spcBetweenButtonData = 20;
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
@@ -33,7 +37,7 @@ class _CountdownSetterState extends State<CountDownSetter> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
-            child: Text("Event Name"),
+            child: Text("Event Name", style: dataStyle),
           ),
           Expanded(
             child: TextField(
@@ -49,29 +53,47 @@ class _CountdownSetterState extends State<CountDownSetter> {
       padding: EdgeInsets.all(10),
       child: Row(
         children: <Widget>[
-          Expanded(
-              child: ElevatedButton(
-            style: style,
-            onPressed: () {
-              showDatePicker(
-                      context: context,
-                      initialDate: selectedDate,
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime.utc(9999, 12, 31))
-                  .then((value) => {
-                        if (value != null)
-                          {
-                            setState(() {
-                              selectedDate = value;
-                            })
-                          }
-                      });
-            },
-            child: const Text('Select Date'),
-          )),
+          RoundedButton("Date", Icons.event, () {
+            showDatePicker(
+                    context: context,
+                    initialDate: selectedDate,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime.utc(9999, 12, 31))
+                .then((value) => {
+                      if (value != null)
+                        {
+                          setState(() {
+                            selectedDate = value;
+                          })
+                        }
+                    });
+          }),
+          SizedBox(
+            width: spcBetweenButtonData,
+          ),
           Expanded(
             child: Text(
-                '${selectedDate.day}.${selectedDate.month}.${selectedDate.year}'),
+              '${selectedDate.day}.${selectedDate.month}.${selectedDate.year}',
+              style: dataStyle,
+            ),
+          ),
+          RoundedButton("Time", Icons.schedule, () {
+            showTimePicker(context: context, initialTime: selectedTime)
+                .then((value) {
+              if (value != null)
+                setState(() {
+                  selectedTime = value;
+                });
+            });
+          }),
+          SizedBox(
+            width: spcBetweenButtonData,
+          ),
+          Expanded(
+            child: Text(
+              '${selectedTime.hour} h, ${selectedTime.minute}',
+              style: dataStyle,
+            ),
           )
         ],
       ),
@@ -80,26 +102,7 @@ class _CountdownSetterState extends State<CountDownSetter> {
     final timeRow = Container(
       padding: EdgeInsets.all(10),
       child: Row(
-        children: <Widget>[
-          Expanded(
-            child: ElevatedButton(
-              style: style,
-              onPressed: () {
-                showTimePicker(context: context, initialTime: selectedTime)
-                    .then((value) {
-                  if (value != null)
-                    setState(() {
-                      selectedTime = value;
-                    });
-                });
-              },
-              child: const Text('Select Time'),
-            ),
-          ),
-          Expanded(
-            child: Text('${selectedTime.hour} h, ${selectedTime.minute}'),
-          )
-        ],
+        children: <Widget>[],
       ),
     );
 
@@ -109,13 +112,15 @@ class _CountdownSetterState extends State<CountDownSetter> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
+            flex: 1,
             child: ElevatedButton(
                 style: style,
                 onPressed: () {
                   bool nameExists =
                       Provider.of<CountdownStore>(context, listen: false)
                           .containsEventName(textController.text);
-                  if (!nameExists) {
+                  bool nameValid = textController.text.isNotEmpty;
+                  if (!nameExists && nameValid) {
                     DateTime countDownDateTime = new DateTime(
                         selectedDate.year,
                         selectedDate.month,
@@ -130,10 +135,15 @@ class _CountdownSetterState extends State<CountDownSetter> {
                     developer.log(
                         "Added Countdown of Name: ${newCountdown.eventName}, with Countdown: T:${newCountdown.targetDateTime.hour}:${newCountdown.targetDateTime.minute} D:${newCountdown.targetDateTime.day}.${newCountdown.targetDateTime.month}${newCountdown.targetDateTime.year} ");
                   } else {
-                    developer.log("Countdown already Exist!");
+                    if (nameExists) {
+                      developer.log("Countdown with name already Exist!");
+                    }
+                    if (!nameValid) {
+                      developer.log("Please enter a valid countdown name");
+                    }
                   }
                 },
-                child: const Text('Timer erstellen')),
+                child: const Text('Create Timer')),
           )
         ],
       ),
