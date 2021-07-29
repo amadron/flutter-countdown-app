@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:developer' as developer;
 
 class CountDownView extends StatefulWidget {
   CountDownView({Key? key, required this.eventName, required this.date})
@@ -32,6 +33,8 @@ class _CountDownViewState extends State<CountDownView> {
     int hours = difference.inHours % 24;
     int minutes = difference.inMinutes % 60;
     int seconds = difference.inSeconds % 60;
+    /*developer.log(
+        'D:${difference.inDays}, H:${difference.inHours}, M:${difference.inMinutes}, S:${difference.inSeconds}'); */
     String countDownString =
         '${difference.inDays} D, ${hours} h, ${minutes} m, ${seconds} s';
     if (!mounted) return;

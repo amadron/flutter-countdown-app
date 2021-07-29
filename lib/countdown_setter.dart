@@ -23,7 +23,7 @@ class _CountdownSetterState extends State<CountDownSetter> {
 
   _CountdownSetterState createState() => _CountdownSetterState();
 
-  void displayDialog(String title, String message) {
+  void displayDialog(String title, String message, [Function? onAccept]) {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -31,7 +31,10 @@ class _CountdownSetterState extends State<CountDownSetter> {
         content: Text(message),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
+            onPressed: () {
+              Navigator.pop(context, 'OK');
+              onAccept!();
+            },
             child: const Text('OK'),
           ),
         ],
@@ -150,7 +153,8 @@ class _CountdownSetterState extends State<CountDownSetter> {
                         .addCountDown(newCountdown);
                     developer.log(
                         "Added Countdown of Name: ${newCountdown.eventName}, with Countdown: T:${newCountdown.targetDateTime.hour}:${newCountdown.targetDateTime.minute} D:${newCountdown.targetDateTime.day}.${newCountdown.targetDateTime.month}${newCountdown.targetDateTime.year} ");
-                    displayDialog("Success", "Countdown was created");
+                    displayDialog("Success", "Countdown was created",
+                        () => Navigator.pop(context));
                   } else {
                     if (nameExists) {
                       developer.log("Countdown with name already Exist!");
