@@ -29,7 +29,7 @@ class _CountDownViewState extends State<CountDownView> {
 
   void updateCountDownText() {
     var difference = date.difference(DateTime.now());
-    int hours = difference.inHours % 60;
+    int hours = difference.inHours % 24;
     int minutes = difference.inMinutes % 60;
     int seconds = difference.inSeconds % 60;
     String countDownString =
