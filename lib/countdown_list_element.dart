@@ -1,7 +1,9 @@
 import 'dart:html';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'dart:developer' as developer;
 
+import 'CountdownStore.dart';
 import 'countdown_view.dart';
 
 class CountDownListElement extends StatelessWidget {
@@ -9,6 +11,46 @@ class CountDownListElement extends StatelessWidget {
 
   final String title;
   final DateTime date;
+
+  void onTap(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Scaffold(
+                  body: Center(
+                      child: CountDownView(
+                    eventName: title,
+                    date: date,
+                  )),
+                )));
+  }
+
+  void onLongPress(BuildContext context) {
+    developer.log("Lon Press");
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text("Delete Event"),
+        content: Text("Are you sure you want to delete the Event \"$title\""),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, 'Yes');
+              Provider.of<CountdownStore>(context, listen: false)
+                  .removeCountDown(title);
+            },
+            child: const Text('Yes'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, 'No');
+            },
+            child: const Text('No'),
+          )
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,18 +61,9 @@ class CountDownListElement extends StatelessWidget {
       child: Material(
           color: Colors.blueAccent,
           child: InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Scaffold(
-                            body: Center(
-                                child: CountDownView(
-                              eventName: title,
-                              date: date,
-                            )),
-                          )));
-            },
+            onTap: () => onTap(context),
+            onLongPress: () => onLongPress(context),
+            onDoubleTap: () => developer.log("Double Tap"),
             child: Container(
               padding: EdgeInsets.only(left: 10, right: 10),
               height: 100,
