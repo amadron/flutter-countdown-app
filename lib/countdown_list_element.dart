@@ -12,6 +12,8 @@ class CountDownListElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const headLineStyle = TextStyle(fontSize: 22);
+    const dataStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 26);
     return InkWell(
         onTap: () {
           Navigator.push(
@@ -25,24 +27,69 @@ class CountDownListElement extends StatelessWidget {
                         )),
                       )));
         },
-        child: Container(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Container(
+            padding: EdgeInsets.only(left: 10, right: 10),
             color: Colors.blueAccent,
-            child: Column(
+            height: 100,
+            child: Row(
               children: [
-                Row(children: [
-                  Text("Title"),
-                  SizedBox(width: 20),
-                  Text(title)
-                ]),
-                Row(children: [
-                  Text("Date"),
-                  SizedBox(
-                    width: 20,
+                Container(
+                  width: 30,
+                  color: Colors.black,
+                ),
+                SizedBox(
+                  width: 50,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "Title",
+                              style: headLineStyle,
+                            ),
+                            SizedBox(width: 20),
+                            Text(
+                              title,
+                              style: dataStyle,
+                            )
+                          ]),
+                      SizedBox(height: 10),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.event,
+                              size: 20,
+                              color: Colors.black,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("${date.day}.${date.month}.${date.year}",
+                                style: dataStyle),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            Icon(Icons.schedule, size: 20, color: Colors.black),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("${date.hour}:${date.minute}",
+                                style: dataStyle),
+                          ]),
+                    ],
                   ),
-                  Text(
-                      "${date.hour}:${date.minute} ${date.day}.${date.month}.${date.year}")
-                ]),
+                ),
               ],
-            )));
+            ),
+          ),
+        ));
   }
 }

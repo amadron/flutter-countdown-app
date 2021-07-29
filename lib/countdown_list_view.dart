@@ -12,6 +12,8 @@ import 'countdown_setter.dart';
 class CountDownListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    const noDataStyle = TextStyle(fontSize: 26, fontWeight: FontWeight.bold);
+
     return Scaffold(
         appBar: AppBar(title: const Text("ContDown List")),
         body: Consumer<CountdownStore>(builder: (context, store, child) {
@@ -29,15 +31,20 @@ class CountDownListView extends StatelessWidget {
                 width: 100,
               ));
             });
-            return FractionallySizedBox(
-                widthFactor: 0.8,
-                child: Container(
-                  child: Column(
-                    children: countDownList,
-                  ),
-                ));
+            return Container(
+              margin: const EdgeInsets.only(left: 50, right: 50),
+              alignment: Alignment.center,
+              child: Column(
+                children: countDownList,
+              ),
+            );
           } else {
-            return Text("No CountDowns Yet");
+            return Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "No Countdowns available",
+                  style: noDataStyle,
+                ));
           }
         }),
         floatingActionButton: FloatingActionButton(
