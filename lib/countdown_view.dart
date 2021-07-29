@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:developer' as developer;
 
+import 'package:simple_countdown/countdown_view_element.dart';
+
 class CountDownView extends StatefulWidget {
   CountDownView({Key? key, required this.eventName, required this.date})
       : super(key: key);
@@ -25,11 +27,14 @@ class _CountDownViewState extends State<CountDownView> {
   int durationSeconds = 0;
   int durationDays = 0;
   Timer? updateTimer;
+  bool isOver = false;
 
   _CountDownViewState(this.eventName, this.date);
 
   void updateCountDownText() {
-    var difference = date.difference(DateTime.now());
+    DateTime now = DateTime.now();
+    isOver = date.isBefore(now);
+    var difference = date.difference(now);
     int hours = difference.inHours % 24;
     int minutes = difference.inMinutes % 60;
     int seconds = difference.inSeconds % 60;
@@ -58,73 +63,18 @@ class _CountDownViewState extends State<CountDownView> {
     const intervall = const Duration(milliseconds: 200);
 
     updateTimer = new Timer.periodic(intervall, (timer) {
+      developer.log("Execute Timer");
       updateCountDownText();
     });
 
-    const countDownStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 40);
-    const headLineStyle =
-        TextStyle(fontWeight: FontWeight.normal, fontSize: 30);
     updateCountDownText();
-    const double middleSpace = 20;
-    return Container(
-        color: Colors.lightBlue.shade50,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  Text("Name", style: headLineStyle),
-                  Text(this.eventName,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 30)),
-                ],
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Spacer(),
-                  Column(
-                    children: [
-                      Text("D", style: headLineStyle),
-                      Text("$durationDays", style: countDownStyle)
-                    ],
-                  ),
-                  SizedBox(width: middleSpace),
-                  Column(
-                    children: [
-                      Text("H", style: headLineStyle),
-                      Text(
-                        "$durationHours",
-                        style: countDownStyle,
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: middleSpace),
-                  Column(
-                    children: [
-                      Text("M", style: headLineStyle),
-                      Text(
-                        "$durationMinutes",
-                        style: countDownStyle,
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: middleSpace),
-                  Column(
-                    children: [
-                      Text("S", style: headLineStyle),
-                      Text(
-                        "$durationSeconds",
-                        style: countDownStyle,
-                      ),
-                    ],
-                  ),
-                  Spacer(),
-                ],
-              ),
-            ]));
+    if (!isOver) {
+      return CountDownViewElement(eventName, durationDays, durationHours,
+          durationMinutes, durationSeconds);
+    } else {
+      updateTimer?.cancel();
+      return Text("Countdown is over",
+          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold));
+    }
   }
 }
