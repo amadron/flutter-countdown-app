@@ -23,6 +23,22 @@ class _CountdownSetterState extends State<CountDownSetter> {
 
   _CountdownSetterState createState() => _CountdownSetterState();
 
+  void displayDialog(String title, String message) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     const dataStyle = TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
@@ -134,12 +150,16 @@ class _CountdownSetterState extends State<CountDownSetter> {
                         .addCountDown(newCountdown);
                     developer.log(
                         "Added Countdown of Name: ${newCountdown.eventName}, with Countdown: T:${newCountdown.targetDateTime.hour}:${newCountdown.targetDateTime.minute} D:${newCountdown.targetDateTime.day}.${newCountdown.targetDateTime.month}${newCountdown.targetDateTime.year} ");
+                    displayDialog("Success", "Countdown was created");
                   } else {
                     if (nameExists) {
                       developer.log("Countdown with name already Exist!");
+                      displayDialog("Error", "Countdown already Exists!");
                     }
                     if (!nameValid) {
                       developer.log("Please enter a valid countdown name");
+                      displayDialog(
+                          "Error", "Please enter a valid Countdown Name");
                     }
                   }
                 },
