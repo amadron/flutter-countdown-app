@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_countdown/count_down_store/count_down.dart';
 import 'dart:developer' as developer;
 
-import 'CountdownStore.dart';
-import 'countdown_view.dart';
+import '../count_down_store/CountdownStore.dart';
+
+typedef void CountdownElementTap(CountDown countdown);
 
 class CountDownListElement extends StatelessWidget {
-  const CountDownListElement(this.title, this.date);
+  const CountDownListElement(this.title, this.date, [this.onElementTap]);
 
   final String title;
   final DateTime date;
+  final CountdownElementTap? onElementTap;
 
   void onTap(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Scaffold(
-                  body: Center(
-                      child: CountDownView(
-                    eventName: title,
-                    date: date,
-                  )),
-                )));
+    onElementTap!(CountDown(title, date));
   }
 
   void onLongPress(BuildContext context) {
@@ -62,7 +56,6 @@ class CountDownListElement extends StatelessWidget {
           child: InkWell(
             onTap: () => onTap(context),
             onLongPress: () => onLongPress(context),
-            onDoubleTap: () => developer.log("Double Tap"),
             child: Container(
               padding: EdgeInsets.only(left: 10, right: 10),
               height: 100,

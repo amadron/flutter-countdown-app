@@ -2,9 +2,9 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'CountdownStore.dart';
-import 'count_down.dart';
-import 'rounded_button.dart';
+import '../count_down_store/CountdownStore.dart';
+import '../count_down_store/count_down.dart';
+import '../components/ui/rounded_button.dart';
 
 class CountDownSetter extends StatefulWidget {
   @override

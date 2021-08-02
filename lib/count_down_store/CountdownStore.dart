@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'count_down.dart';
 import 'dart:developer' as developer;
-import 'app_util.dart';
+import '../util/app_util.dart';
 
 class CountdownStore extends ChangeNotifier {
   CountdownStore() {
@@ -32,6 +32,7 @@ class CountdownStore extends ChangeNotifier {
         developer.log("No Date Found!");
       }
     });
+    developer.log("Store initialized!");
   }
 
   void addPersistentEntry(CountDown countdown) async {

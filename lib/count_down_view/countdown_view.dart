@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:developer' as developer;
 
-import 'package:simple_countdown/countdown_view_element.dart';
+import 'package:simple_countdown/count_down_view/countdown_view_element.dart';
 
 class CountDownView extends StatefulWidget {
   CountDownView({Key? key, required this.eventName, required this.date})

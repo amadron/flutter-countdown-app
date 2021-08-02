@@ -2,13 +2,16 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:simple_countdown/countdown_list_element.dart';
+import 'package:simple_countdown/count_down_list/countdown_list_element.dart';
 
-import 'CountdownStore.dart';
-import 'count_down.dart';
-import 'countdown_setter.dart';
+import '../count_down_store/CountdownStore.dart';
+import '../count_down_store/count_down.dart';
+import '../count_down_setter/countdown_setter.dart';
 
 class CountDownListView extends StatelessWidget {
+  CountDownListView([this.onElementTap]) : super();
+
+  final CountdownElementTap? onElementTap;
   @override
   Widget build(BuildContext context) {
     const noDataStyle = TextStyle(fontSize: 26, fontWeight: FontWeight.bold);
@@ -23,8 +26,8 @@ class CountDownListView extends StatelessWidget {
               countDownList.add(
                 Padding(
                     padding: EdgeInsets.all(2),
-                    child: CountDownListElement(
-                        element.eventName, element.targetDateTime)),
+                    child: CountDownListElement(element.eventName,
+                        element.targetDateTime, onElementTap)),
               );
               countDownList.add(SizedBox(
                 width: 100,
