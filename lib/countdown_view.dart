@@ -50,6 +50,11 @@ class _CountDownViewState extends State<CountDownView> {
       durationDays = difference.inDays;
       countDownText = countDownString;
     });
+    const intervall = const Duration(milliseconds: 200);
+    updateTimer = new Timer.periodic(intervall, (timer) {
+      developer.log("Execute Timer");
+      updateCountDownText();
+    });
   }
 
   @override
@@ -60,13 +65,6 @@ class _CountDownViewState extends State<CountDownView> {
 
   @override
   Widget build(BuildContext context) {
-    const intervall = const Duration(milliseconds: 200);
-
-    updateTimer = new Timer.periodic(intervall, (timer) {
-      developer.log("Execute Timer");
-      updateCountDownText();
-    });
-
     updateCountDownText();
     if (!isOver) {
       return CountDownViewElement(eventName, durationDays, durationHours,
